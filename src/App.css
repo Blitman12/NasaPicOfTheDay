@@ -1,35 +1,52 @@
 .entire {
-  background: url("https://images.unsplash.com/photo-1610028179054-e3f7a8da384c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80") no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+  background: url('https://images.unsplash.com/photo-1502481851512-e9e2529bfbf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1350&q=80')
+    no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .title {
   text-align: center;
+  color: white;
 }
 
 .title-2 {
   text-align: center;
-  color:white;
+  color: white;
+  padding-top: 3em;
 }
 
 .feed-container {
-  display: flex; 
+  display: flex;
   justify-content: center;
 }
 
 .date-ranges {
   text-align: center;
-  color:white;
+  color: white;
   padding-bottom: 2.5em;
 }
 
 .displayNEO {
   text-align: center;
-  padding-bottom: 5em;
-  display: flex; 
+  padding-bottom: 2em;
+  display: flex;
   justify-content: center;
 }
 
+.displayMars {
+  text-align: center;
+  padding-top: 2.5em;
+  padding-bottom: 5em;
+  display: flex;
+  justify-content: center;
+}
+
+.loader {
+  text-align: center;
+  display: flex;
+  padding-bottom: 2.5em;
+  justify-content: center;
+}
