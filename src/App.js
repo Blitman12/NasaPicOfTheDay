@@ -157,7 +157,7 @@ const App = () => {
       </div>
       <div>
         <section className="title-2">
-          <h1>Guess what the temps are by the Curiosity Rover by Mars</h1>
+          <h1>Guess what the temps are by the Curiosity Rover on Mars</h1>
           <button onClick={() => solTemp()} style={{ marginTop: '1em' }}>
             Get Info
           </button>
