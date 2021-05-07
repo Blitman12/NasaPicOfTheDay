@@ -12,11 +12,14 @@ const App = () => {
   const [marsInfo, setMarsInfo] = useState(null);
   const [neo, setNeo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [apodLoad, apodSetLoad] = useState(false);
   const [marsLoading, setMarsLoading] = useState(false);
+  const [dateDifferenceErr, setDateDifErr] = useState(null);
 
   // On Site load Nasa Picture Of The Day
   useEffect(() => {
     try {
+      apodSetLoad(true);
       async function fetchData() {
         const response = await fetch(
           `https://api.nasa.gov/planetary/apod?api_key=${process.env.REACT_APP_API_KEY}`
@@ -24,6 +27,7 @@ const App = () => {
         const data = await response.json();
         setPicture(data.url);
         setPicInfo(data);
+        apodSetLoad(false);
       }
       fetchData();
     } catch (e) {
@@ -44,20 +48,51 @@ const App = () => {
     // Sets loading Spinner
     setLoading(true);
     // Fetch call for data return
-    try {
-      await fetch(
-        `https://api.nasa.gov/neo/rest/v1/feed?start_date=${finalSDate}&end_date=${finalEDate}&api_key=${process.env.REACT_APP_API_KEY}`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          const neoData = data.near_earth_objects;
-          setNeo(neoData);
-          // Turns loading off
-          setLoading(false);
-        });
-    } catch (e) {
-      console.error(e);
+
+    // Valdiation Function Call
+    const isValid = formValidation();
+    if (isValid) {
+      try {
+        await fetch(
+          `https://api.nasa.gov/neo/rest/v1/feed?start_date=${finalSDate}&end_date=${finalEDate}&api_key=${process.env.REACT_APP_API_KEY}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const neoData = data.near_earth_objects;
+            setNeo(neoData);
+            // Turns loading off
+            setLoading(false);
+            // Reset Validation for Dates
+            setDateDifErr(null);
+          });
+      } catch (e) {
+        console.error(e);
+      }
     }
+  };
+
+  const formValidation = () => {
+    const dateDifferenceErr = {};
+    let isValid = true;
+
+    let newStartDate = new Date(startDate);
+    let finalSDate = JSON.stringify(newStartDate);
+    finalSDate = finalSDate.slice(1, 11);
+    let newEndDate = new Date(endDate);
+    let finalEDate = JSON.stringify(newEndDate);
+    finalEDate = finalEDate.slice(1, 11);
+
+    let dayDif = Math.floor(
+      (Date.parse(finalEDate) - Date.parse(finalSDate)) / 86400000
+    );
+
+    if (dayDif > 4) {
+      dateDifferenceErr.datesToFarApart = 'The dates are too far apart';
+      isValid = false;
+      setLoading(false);
+    }
+    setDateDifErr(dateDifferenceErr);
+    return isValid;
   };
 
   const solTemp = async () => {
@@ -84,31 +119,38 @@ const App = () => {
       <div className="title">
         <h1>Nasa`s Picture of the day</h1>
       </div>
-      <div className="feed-container">
-        <Card style={{ width: '35rem' }}>
-          <Card.Img variant="top" src={picture} />
-          <Card.Body>
-            {picInfo && <Card.Title>{picInfo.title}</Card.Title>}
-            {picInfo && <Card.Text>{picInfo.explanation}</Card.Text>}
-          </Card.Body>
-          <Card.Body>
+      {apodLoad ? (
+        <div className="loader">
+          <MoonLoader size={100} color="red" loading={apodLoad} />
+        </div>
+      ) : (
+        <div className="feed-container">
+          <Card style={{ width: '35rem' }}>
+            <Card.Img variant="top" src={picture} />
+            <Card.Body>
+              {picInfo && <Card.Title>{picInfo.title}</Card.Title>}
+              {picInfo && <Card.Text>{picInfo.explanation}</Card.Text>}
+            </Card.Body>
+            <Card.Body>
+              {picInfo && (
+                <Card.Link href={picture}>Link to original photo</Card.Link>
+              )}
+            </Card.Body>
             {picInfo && (
-              <Card.Link href={picture}>Link to original photo</Card.Link>
+              <Card.Footer className="text-muted">
+                Date: {picInfo.date}
+              </Card.Footer>
             )}
-          </Card.Body>
-          {picInfo && (
-            <Card.Footer className="text-muted">
-              Date: {picInfo.date}
-            </Card.Footer>
-          )}
-        </Card>
-      </div>
+          </Card>
+        </div>
+      )}
+
       <div>
         <section className="title-2">
           <h1>How many Near Earth Objects (NEO) are there?</h1>
         </section>
         <section className="date-ranges">
-          <p>*please select no more than 4 days*</p>
+          <p>*please select no more than 5 days*</p>
           <DatePicker
             dateFormat="yyyy/MM/dd"
             selected={startDate}
@@ -120,6 +162,12 @@ const App = () => {
             onChange={(date) => setEndDate(date)}
           />
           <button onClick={() => handleClick()}>Submit Search</button>
+          {dateDifferenceErr &&
+            Object.keys(dateDifferenceErr).map((key) => {
+              return (
+                <div style={{ color: 'red' }}>{dateDifferenceErr[key]}</div>
+              );
+            })}
         </section>
         <div className="loader">
           <MoonLoader size={100} color="red" loading={loading} />
