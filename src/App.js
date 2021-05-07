@@ -222,7 +222,7 @@ const App = () => {
                   Min Temp: {marsInfo.min_temp}°C or {cToF(marsInfo.min_temp)}°F
                 </ListGroupItem>
                 <ListGroupItem>
-                  Min Temp: {marsInfo.max_temp}°C or {cToF(marsInfo.max_temp)}°F
+                  Max Temp: {marsInfo.max_temp}°C or {cToF(marsInfo.max_temp)}°F
                 </ListGroupItem>
                 <ListGroupItem>Sunrise: {marsInfo.sunrise}</ListGroupItem>
                 <ListGroupItem>Sunrise: {marsInfo.sunset}</ListGroupItem>
