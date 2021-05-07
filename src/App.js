@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { BounceLoader } from 'react-spinners';
+import { MoonLoader } from 'react-spinners';
 import DatePicker from 'react-datepicker';
 import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import './App.css';
@@ -12,6 +12,7 @@ const App = () => {
   const [marsInfo, setMarsInfo] = useState(null);
   const [neo, setNeo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [marsLoading, setMarsLoading] = useState(false);
 
   // On Site load Nasa Picture Of The Day
   useEffect(() => {
@@ -60,13 +61,14 @@ const App = () => {
   };
 
   const solTemp = async () => {
+    setMarsLoading(true);
     try {
       await fetch(`https://api.maas2.apollorion.com/`)
         .then((response) => response.json())
         .then((data) => {
           const marsData = data;
           setMarsInfo(marsData);
-          console.log(marsData);
+          setMarsLoading(false);
         });
     } catch (e) {
       console.error(e);
@@ -120,7 +122,7 @@ const App = () => {
           <button onClick={() => handleClick()}>Submit Search</button>
         </section>
         <div className="loader">
-          <BounceLoader size={100} color="red" loading={loading} />
+          <MoonLoader size={100} color="red" loading={loading} />
         </div>
         <section className="displayNEO">
           {neo &&
@@ -154,12 +156,15 @@ const App = () => {
         </section>
       </div>
       <div>
-      <section className="title-2">
+        <section className="title-2">
           <h1>Guess what the temps are by the Curiosity Rover by Mars</h1>
-        <button onClick={() => solTemp()} style={{marginTop: "1em"}}>
-          Get Info
-        </button>
+          <button onClick={() => solTemp()} style={{ marginTop: '1em' }}>
+            Get Info
+          </button>
         </section>
+        <div className="loader2">
+          <MoonLoader size={100} color="red" loading={marsLoading} />
+        </div>
         <section className="displayMars">
           {marsInfo && (
             <Card style={{ width: '18rem' }}>

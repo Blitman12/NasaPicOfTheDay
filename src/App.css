@@ -50,3 +50,10 @@
   padding-bottom: 2.5em;
   justify-content: center;
 }
+
+.loader2 {
+  text-align: center;
+  display: flex;
+  padding-top: 2.5em;
+  justify-content: center;
+}
