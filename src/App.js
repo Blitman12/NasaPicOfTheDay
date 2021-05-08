@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { MoonLoader } from 'react-spinners';
 import DatePicker from 'react-datepicker';
+import  Expire  from './components/Expire';
 import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import './App.css';
 
@@ -34,6 +35,7 @@ const App = () => {
       console.error(e);
     }
   }, []);
+
 
   const handleClick = async () => {
     // changes user submitted date to yyyy-mm-dd
@@ -165,7 +167,9 @@ const App = () => {
           {dateDifferenceErr &&
             Object.keys(dateDifferenceErr).map((key) => {
               return (
-                <div style={{ color: 'red' }}>{dateDifferenceErr[key]}</div>
+                <Expire delay="5000">
+                <div style={{ color: 'red' }}>**{dateDifferenceErr[key]}**</div>
+                </Expire>
               );
             })}
         </section>
