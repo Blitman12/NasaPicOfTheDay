@@ -29,7 +29,7 @@ const MarsInfo = () => {
 return (
     <div>
         <section className="title-2">
-          <h1>try and guess what the temperature is on Mars by the Curiosity Rover?</h1>
+          <h1>Try and think about what the environment is like near the Curiosity Rover!</h1>
           <button onClick={() => solTemp()} style={{ marginTop: '1em' }}>
             Get Info
           </button>
