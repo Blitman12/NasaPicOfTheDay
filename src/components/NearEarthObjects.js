@@ -96,6 +96,12 @@ const NearEarthObjects = () => {
     return isValid;
   };
 
+  const dateArr = (key) => {
+    const dateArr = key.split('-').reverse();
+    [dateArr[0], dateArr[1]] = [dateArr[1], dateArr[0]];
+    return dateArr.join('/');
+  };
+
   return (
     <div>
       <section className="title-2">
@@ -103,21 +109,22 @@ const NearEarthObjects = () => {
       </section>
       <section className="date-ranges">
         <p>*please select no more than 5 days*</p>
-
-        <DatePicker
-          dateFormat="MM/dd/yyyy"
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          maxDate={new Date()}
-          isClearable
-        />
-        <DatePicker
-          dateFormat="MM/dd/yyyy"
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          maxDate={new Date()}
-          isClearable
-        />
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+          <DatePicker
+            dateFormat="MM/dd/yyyy"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            maxDate={new Date()}
+            isClearable
+          />
+          <DatePicker
+            dateFormat="MM/dd/yyyy"
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            maxDate={new Date()}
+            isClearable
+          />
+        </div>
         <button onClick={() => handleClick()}>Submit Search</button>
         {dateDifferenceErr &&
           Object.keys(dateDifferenceErr).map((key) => {
@@ -137,7 +144,7 @@ const NearEarthObjects = () => {
             <Fragment key={key} className="neo-cards">
               <Card style={{ width: '18rem' }}>
                 <Card.Header>
-                  {key} had {val.length} NEO`s
+                  {dateArr(key)} had {val.length} NEO`s
                 </Card.Header>
                 <Card.Title>Name</Card.Title>
                 <ListGroup variant="flush">
