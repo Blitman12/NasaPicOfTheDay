@@ -1,6 +1,7 @@
 import { useState, Fragment } from 'react';
 import { Card, ListGroup } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Expire from './Expire';
 import { BarLoader } from 'react-spinners';
 
@@ -14,18 +15,24 @@ const NearEarthObjects = () => {
   const handleClick = async () => {
     // changes user submitted date to yyyy-mm-dd
     let newStartDate = new Date(startDate);
+    newStartDate.setMinutes(
+      newStartDate.getMinutes() - newStartDate.getTimezoneOffset()
+    );
     let finalSDate = JSON.stringify(newStartDate);
     finalSDate = finalSDate.slice(1, 11);
 
     // changes user submitted date to yyyy-mm-dd
     let newEndDate = new Date(endDate);
+    newEndDate.setMinutes(
+      newEndDate.getMinutes() - newEndDate.getTimezoneOffset()
+    );
     let finalEDate = JSON.stringify(newEndDate);
     finalEDate = finalEDate.slice(1, 11);
 
     // Sets loading Spinner
     setLoading(true);
-    // Fetch call for data return
 
+    // Fetch call for data return
     // Valdiation Function Call
     const isValid = formValidation();
     if (isValid) {
@@ -36,7 +43,23 @@ const NearEarthObjects = () => {
           .then((response) => response.json())
           .then((data) => {
             const neoData = data.near_earth_objects;
-            setNeo(neoData);
+            // Sort the data by Key, convert Data to readble string
+            const orderedNeoData = {};
+            Object.keys(neoData)
+              .sort(function (a, b) {
+                return a
+                  .split('-')
+                  .reverse()
+                  .join('')
+                  .localeCompare(b.split('-').reverse().join(''));
+              })
+              .forEach(function (key) {
+                orderedNeoData[key] = neoData[key];
+              });
+            console.log(neoData);
+            console.log(orderedNeoData);
+            setNeo(orderedNeoData);
+
             // Turns loading off
             setLoading(false);
             // Reset Validation for Dates
@@ -55,6 +78,7 @@ const NearEarthObjects = () => {
     let newStartDate = new Date(startDate);
     let finalSDate = JSON.stringify(newStartDate);
     finalSDate = finalSDate.slice(1, 11);
+
     let newEndDate = new Date(endDate);
     let finalEDate = JSON.stringify(newEndDate);
     finalEDate = finalEDate.slice(1, 11);
@@ -79,15 +103,20 @@ const NearEarthObjects = () => {
       </section>
       <section className="date-ranges">
         <p>*please select no more than 5 days*</p>
+
         <DatePicker
-          dateFormat="yyyy/MM/dd"
+          dateFormat="MM/dd/yyyy"
           selected={startDate}
           onChange={(date) => setStartDate(date)}
+          maxDate={new Date()}
+          isClearable
         />
         <DatePicker
-          dateFormat="yyyy/MM/dd"
+          dateFormat="MM/dd/yyyy"
           selected={endDate}
           onChange={(date) => setEndDate(date)}
+          maxDate={new Date()}
+          isClearable
         />
         <button onClick={() => handleClick()}>Submit Search</button>
         {dateDifferenceErr &&
