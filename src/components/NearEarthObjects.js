@@ -109,7 +109,7 @@ const NearEarthObjects = () => {
       </section>
       <section className="date-ranges">
         <p>*please select no more than 5 days*</p>
-        <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <DatePicker
             dateFormat="MM/dd/yyyy"
             selected={startDate}
