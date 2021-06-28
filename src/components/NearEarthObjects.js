@@ -125,7 +125,7 @@ const NearEarthObjects = () => {
             isClearable
           />
         </div>
-        <button onClick={() => handleClick()}>Submit Search</button>
+        <button onClick={() => handleClick()} style={{marginTop: '1.5em'}}>Submit Search</button>
         {dateDifferenceErr &&
           Object.keys(dateDifferenceErr).map((key) => {
             return (

@@ -26,6 +26,12 @@ const PictureOfTheDay = () => {
     }
   }, []);
 
+  const dateArr = (key) => {
+    const dateArr = key.split('-').reverse();
+    [dateArr[0], dateArr[1]] = [dateArr[1], dateArr[0]];
+    return dateArr.join('/');
+  };
+
   return (
     <div>
       <div className="title">
@@ -51,7 +57,7 @@ const PictureOfTheDay = () => {
             </Card.Body>
             {picInfo && (
               <Card.Footer className="text-muted">
-                Date: {picInfo.date}
+                Date: {dateArr(picInfo.date)}
               </Card.Footer>
             )}
           </Card>
